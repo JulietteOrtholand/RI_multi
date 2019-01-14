@@ -7,6 +7,7 @@ public interface IStructModel<X,Y> {
 	public Y predict(STrainingSample<X,Y> ts);
 	public Y lai(STrainingSample<X,Y> ts);
 	public IStructInstantiation <X,Y> instantiation();
+	void setInstantiation(IStructInstantiation<X, Y> instance);
 	public double[] getParameters();
-	// [nbIter, dim,  ]
+	// [dim]
 }

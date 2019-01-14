@@ -17,4 +17,12 @@ public class VectorOperations {
 		return Math.sqrt(norm2(v));
 	}
 	
+	public static double[] subtract(double [] v1 , double [] v2){
+		double[] res = v1.clone();
+		for(int i=0;i<v1.length;i++){
+			res[i] -= v2[i];
+		}
+		return res;
+	}
+	
 }

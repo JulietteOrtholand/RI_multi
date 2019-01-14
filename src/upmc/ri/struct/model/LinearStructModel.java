@@ -4,17 +4,27 @@ import upmc.ri.struct.instantiation.IStructInstantiation;
 
 public abstract class LinearStructModel<X,Y> implements IStructModel<X,Y> {
 
-	protected IStructInstantiation<X,Y> structInst;
+	protected IStructInstantiation<X,Y> instance;
 	protected double[] parameters;
 	protected int dimpsi;
+
+	public LinearStructModel(int dimpsi){
+		this.parameters = new double[dimpsi];
+	}
 	
+	@Override
 	public double[] getParameters() {
 		return this.parameters;
 	}
 	
-	public LinearStructModel(int dimpsi){
-		this.parameters = new double[2];
-		this.parameters[1] = dimpsi;
+	@Override
+	public IStructInstantiation<X, Y> instantiation() {
+		return this.instance;
 	}
+
 	
+	@Override
+	public void setInstantiation(IStructInstantiation <X,Y> instance) {
+		this.instance = instance;
+	}
 }

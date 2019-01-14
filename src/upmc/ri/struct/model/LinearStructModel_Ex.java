@@ -2,59 +2,51 @@ package upmc.ri.struct.model;
 
 import upmc.ri.struct.STrainingSample;
 import upmc.ri.struct.instantiation.IStructInstantiation;
+import upmc.ri.utils.VectorOperations;
 
 public class LinearStructModel_Ex<X,Y> extends LinearStructModel<X,Y> {
-	protected IStructInstantiation <X,Y> instance;
 	protected double[] w = new double[(int) this.getParameters()[1]];
 	
-	public LinearStructModel_Ex(int dimpsi) {
+	public LinearStructModel_Ex(IStructInstantiation<X,Y> instance, int dimpsi) {
 		super(dimpsi);
-		this.instance= this.instantiation();
-		// TODO Auto-generated constructor stub
+		this.instance = instance;
 	}
 
 	@Override
 	public Y predict(STrainingSample<X, Y> ts) {
-		return this.lai(ts);
-	}
-	
-	@Override
-	public Y lai(STrainingSample<X, Y> couple) {
-		int dimpsi = (int) this.getParameters()[1];
+		X xi = ts.input;
+		Y maxY = null;
+		double max = -Double.MAX_VALUE;
 		
-		double maxLai = 0;
-		int maxIdx = -1;
-		//Utiliser enumerateY ...............
-		for(int j; j < dimpsi; j++) {
-			double pv = 0;
-			double[] psi = this.instance.psi(couple.input, j);
-			double delta = this.instance.delta(couple.output, j);
+		for (Y y : this.instance.enumerateY()) {
 			
-			for(int i=0; i < psi.length; i++) {
-				pv += w[i]*psi[i];
-			}
+			double psi = VectorOperations.dot(this.getParameters(), this.instance.psi(xi, y));
 			
-			double currLai = pv + delta;
-			if (maxLai < currLai || maxIdx == -1) {
-				maxLai = currLai;
-				maxIdx = j;
+			if (max < psi) {
+				max = psi;
+				maxY = y;
 			}
 		}
-		return maxIdx;
+		return maxY;
 	}
-
+	
 	@Override
-	public IStructInstantiation<X, Y> instantiation() {
-		// TODO Auto-generated method stub
-		return null;
+	public Y lai(STrainingSample<X, Y> ts) {		
+		X xi = ts.input;
+		Y yi = ts.output;
+		Y maxY = null;
+		double maxLai = -Double.MAX_VALUE;
+		
+		for (Y y : this.instance.enumerateY()) {
+			double delta = this.instance.delta(y, yi);
+			double psi = VectorOperations.dot(this.getParameters(), this.instance.psi(xi, y));
+			
+			double currLai = delta + psi;
+			if (maxLai < currLai) {
+				maxLai = currLai;
+				maxY = y;
+			}
+		}
+		return maxY;
 	}
-	
-	public double[] getW() {
-		return this.w;
-	}
-	
-	public void setW(double[] w) {
-		this.w = w;
-	}
-
 }

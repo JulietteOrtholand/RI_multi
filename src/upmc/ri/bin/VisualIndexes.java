@@ -1,7 +1,6 @@
 package upmc.ri.bin;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -13,50 +12,39 @@ import upmc.ri.struct.STrainingSample;
 import upmc.ri.utils.PCA;
 
 public class VisualIndexes {
-    public static DataSet createIndex() {
-
-    	final VIndexFactory factory = new VIndexFactory();
-    	ImageNetParser parser = new ImageNetParser();
-    	
+    public static DataSet<double[], String> createIndex(String path) {    	
     	Set<String> files = ImageNetParser.classesImageNet();
 
     	List<STrainingSample<double[],String>> train = new ArrayList<STrainingSample<double[],String>>();
     	List<STrainingSample<double[],String>> test = new ArrayList<STrainingSample<double[],String>>();
-    	int count = 0;
+    	
     	// Loop through each category
-    	for (Iterator<String> i=files.iterator(); i.hasNext();) {
-    		String name = i.next();
-    		String filename = "./sbow/" + name + ".txt";
+    	for (String name : files) {
+    		String filename = path + name + ".txt";
+    		int count = 0;
     		
     		try {
-				List<ImageFeatures> features = parser.getFeatures(filename);
+				List<ImageFeatures> features = ImageNetParser.getFeatures(filename);
 				for (ImageFeatures feature : features) {
 					// Extract X,Y
-					double[] bow = factory.computeBow(feature);
-					List<Double> x = feature.getX();
+					double[] bow = VIndexFactory.computeBow(feature);
 					
-					if(count<800) {
-						train.add(new STrainingSample(bow,name));
+					if(count < 800) {
+						train.add(new STrainingSample<double[], String>(bow, name));
+					} else {
+						test.add(new STrainingSample<double[], String>(bow, name));
 					}
-					else {
-						test.add(new STrainingSample(bow,name));
-					}
+					count++;
 				}
-				
-				
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
     	}
     	
-    	DataSet dataset = new DataSet(train, test);
-    	DataSet datasetPca = PCA.computePCA(dataset , 250);
+    	DataSet<double[], String> dataset = new DataSet<double[], String>(train, test);
+    	DataSet<double[], String> datasetPca = PCA.computePCA(dataset, 250);
     	
     	return datasetPca;
-    }
-    
-    public static DataSet<X,Y> convertClasses(DataSet<X,Y> dataset){
-    	
     }
     
     public static double squareSum(double...values) {
@@ -64,5 +52,9 @@ public class VisualIndexes {
     	for (double value:values)
     	   result += value * value;
     	return result;
+    }
+    
+    public static void main(String[] args) throws Exception {
+    	VisualIndexes.createIndex("./sbow/" );
     }
 }
