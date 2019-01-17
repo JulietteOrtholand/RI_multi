@@ -5,8 +5,6 @@ import upmc.ri.struct.instantiation.IStructInstantiation;
 import upmc.ri.utils.VectorOperations;
 
 public class LinearStructModel_Ex<X,Y> extends LinearStructModel<X,Y> {
-	protected double[] w = new double[(int) this.getParameters()[1]];
-	
 	public LinearStructModel_Ex(IStructInstantiation<X,Y> instance, int dimpsi) {
 		super(dimpsi);
 		this.instance = instance;

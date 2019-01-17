@@ -12,6 +12,8 @@ import upmc.ri.struct.STrainingSample;
 import upmc.ri.utils.PCA;
 
 public class VisualIndexes {
+	public static int PCA_DIM = 250;
+	
     public static DataSet<double[], String> createIndex(String path) {    	
     	Set<String> files = ImageNetParser.classesImageNet();
 
@@ -42,7 +44,7 @@ public class VisualIndexes {
     	}
     	
     	DataSet<double[], String> dataset = new DataSet<double[], String>(train, test);
-    	DataSet<double[], String> datasetPca = PCA.computePCA(dataset, 250);
+    	DataSet<double[], String> datasetPca = PCA.computePCA(dataset, VisualIndexes.PCA_DIM);
     	
     	return datasetPca;
     }
@@ -55,6 +57,6 @@ public class VisualIndexes {
     }
     
     public static void main(String[] args) throws Exception {
-    	VisualIndexes.createIndex("./sbow/" );
+    	VisualIndexes.createIndex("./sbow/");
     }
 }

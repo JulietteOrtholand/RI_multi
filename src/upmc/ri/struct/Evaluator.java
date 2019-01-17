@@ -20,23 +20,24 @@ public class Evaluator<X,Y> {
 		err_train=0.0;
 		pred_train = new ArrayList<Y>();
 		// Evaluate training set
-		for(STrainingSample<X,Y> ts : listtrain){
+		
+		for(STrainingSample<X,Y> ts : this.listtrain){
 			Y pred = model.predict(ts);
 			pred_train.add(pred);
 			err_train += model.instantiation().delta(ts.output,pred);
 		}
 		
-		err_train /=listtrain.size();
+		err_train /=this.listtrain.size();
 		
 		err_test=0.0;
 		pred_test = new ArrayList<Y>();
 		// Evaluate testing set
-		for(STrainingSample<X,Y> ts : listtest){
+		for(STrainingSample<X,Y> ts : this.listtest){
 			Y pred = model.predict(ts);
 			pred_test.add(pred);
 			err_test += model.instantiation().delta(ts.output,pred);
 		}
-		err_test /=listtest.size();
+		err_test /=this.listtest.size();
 	}
 
 	public double getErr_train() {

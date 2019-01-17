@@ -13,13 +13,13 @@ public class SGDTrainer<X,Y> implements ITrainer<X,Y>{
 	private Evaluator<X, Y> evaluator;
 	private int max_iter;
 	private double lambda;
-	private double eps;
+	private double gamma;
 
-	public SGDTrainer(Evaluator<X, Y> evaluator, double eps, double lambda, int max_iter) {
+	public SGDTrainer(Evaluator<X, Y> evaluator, double gamma, double lambda, int max_iter) {
 		this.evaluator = evaluator;
 		this.max_iter = max_iter;
 		this.lambda = lambda;
-		this.eps = eps;
+		this.gamma = gamma;
 	}
 	
 	@Override
@@ -48,10 +48,12 @@ public class SGDTrainer<X,Y> implements ITrainer<X,Y>{
 						instance.psi(xi, ŷ), 
 						instance.psi(xi, yi)
 						);
-				
 				/* update */
 				for (int j = 0; j < params.length; j++) {
-					params[j] = params[j] - this.eps * (this.lambda * params[j] + g[j]);
+					
+					
+					params[j] = params[j] - this.gamma * (this.lambda * params[j] + g[j]);
+					
 				}
 			}
 			this.evaluator.evaluate();
