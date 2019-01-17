@@ -20,10 +20,8 @@ public class MultiClassHier extends MultiClass {
 			for(String class2: enumerateY()) {
 				int y = this.dict.get(class2);
 				double similarity = calculator.calcRelatednessOfWords(class1, class2);
-				if (class1.equals(class2)) {
-					this.distances[ŷ][y] = 0;
-				} else {
-					
+				if (!class1.equals(class2)) {
+					this.distances[ŷ][y];
 				}
 			}
 		}
