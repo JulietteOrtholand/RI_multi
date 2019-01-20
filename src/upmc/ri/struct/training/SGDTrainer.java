@@ -1,5 +1,6 @@
 package upmc.ri.struct.training;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import upmc.ri.struct.Evaluator;
@@ -25,7 +26,11 @@ public class SGDTrainer<X,Y> implements ITrainer<X,Y>{
 	@Override
 	public void train(List<STrainingSample<X, Y>> lts, IStructModel<X, Y> model) {
 		Random rand = new Random();
-
+		
+		double[] err_train = new double[this.max_iter];
+		double[] err_test = new double[this.max_iter];
+		double[] err_convex = new double[this.max_iter];
+		
 		/* w <- 0 */
 		double[] params = model.getParameters();
 		for (int i = 0; i < params.length; i++) {
@@ -50,10 +55,7 @@ public class SGDTrainer<X,Y> implements ITrainer<X,Y>{
 						);
 				/* update */
 				for (int j = 0; j < params.length; j++) {
-					
-					
 					params[j] = params[j] - this.gamma * (this.lambda * params[j] + g[j]);
-					
 				}
 			}
 			this.evaluator.evaluate();
@@ -61,7 +63,14 @@ public class SGDTrainer<X,Y> implements ITrainer<X,Y>{
 			System.out.println("global loss : " + this.convex_loss(lts, model));
 			System.out.println("err train : " + this.evaluator.getErr_train());
 			System.out.println("err test : " + this.evaluator.getErr_test());
+			
+			err_train[t] = this.evaluator.getErr_train();
+			err_test[t] = this.evaluator.getErr_test();
+			err_convex[t] = this.convex_loss(lts, model);
 		}
+		System.out.println(Arrays.toString(err_train));
+		System.out.println(Arrays.toString(err_test));
+		System.out.println(Arrays.toString(err_convex));
 	}
 	
 	private double convex_loss(List<STrainingSample<X, Y>> lts , IStructModel<X,Y> model) {
@@ -75,7 +84,7 @@ public class SGDTrainer<X,Y> implements ITrainer<X,Y>{
 			
 			X xi = ts.input;
 			Y yi = ts.output;
-			double max = -Double.MAX_VALUE; //check if same as -999999.99;
+			double max = -Double.MAX_VALUE;
 			
 			for (Y y : instantiation.enumerateY()) {
 				max = Math.max( max, instantiation.delta(yi, y) + VectorOperations.dot(instantiation.psi(xi, y), params) );

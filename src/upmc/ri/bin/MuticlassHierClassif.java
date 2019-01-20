@@ -52,6 +52,8 @@ public class MuticlassHierClassif {
 			y.add(ts.output);
 		}
 		
+		//System.out.println(evaluator.)
+		
 		System.out.println("Voici le rapport de la matrice de confusion, chef!");
 		instance.confusionMatrix(ŷ, y);
 	}
