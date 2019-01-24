@@ -8,6 +8,7 @@ import upmc.ri.struct.DataSet;
 import upmc.ri.struct.Evaluator;
 import upmc.ri.struct.STrainingSample;
 import upmc.ri.struct.instantiation.MultiClass;
+import upmc.ri.struct.instantiation.MultiClassHier;
 import upmc.ri.struct.model.LinearStructModel_Ex;
 import upmc.ri.struct.training.SGDTrainer;
 
@@ -49,6 +50,14 @@ public class MuticlassClassif {
 			ŷ.add(model.predict(ts));
 			y.add(ts.output);
 		}
+
+		/* 3. Train on 0-1 loss and evaluate on hierarchical loss */
+		model.setInstantiation(new MultiClassHier());
+		evaluator.setModel(model);
+		evaluator.evaluate();
+		System.out.println("Evaluer performances en utilisant la hierarchical loss: " + String.valueOf(evaluator.getErr_train()));
+		System.out.println("Test  Error Hier: " + String.valueOf(evaluator.getErr_test() ));
+		
 		instance.confusionMatrix(ŷ, y);
 	}
 }

@@ -38,6 +38,9 @@ public class Evaluator<X,Y> {
 			err_test += model.instantiation().delta(ts.output,pred);
 		}
 		err_test /=this.listtest.size();
+		
+		System.out.println("err train : " + this.getErr_train());
+		System.out.println("err test : " + this.getErr_test());
 	}
 
 	public double getErr_train() {

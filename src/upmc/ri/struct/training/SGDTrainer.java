@@ -58,11 +58,9 @@ public class SGDTrainer<X,Y> implements ITrainer<X,Y>{
 					params[j] = params[j] - this.gamma * (this.lambda * params[j] + g[j]);
 				}
 			}
-			this.evaluator.evaluate();
 			System.out.println("epoch : " + t);
 			System.out.println("global loss : " + this.convex_loss(lts, model));
-			System.out.println("err train : " + this.evaluator.getErr_train());
-			System.out.println("err test : " + this.evaluator.getErr_test());
+			this.evaluator.evaluate();
 			
 			err_train[t] = this.evaluator.getErr_train();
 			err_test[t] = this.evaluator.getErr_test();
@@ -77,6 +75,8 @@ public class SGDTrainer<X,Y> implements ITrainer<X,Y>{
 		double loss = 0;
 		double[] params = model.getParameters();
 		IStructInstantiation<X, Y> instantiation = model.instantiation();
+		if (instantiation.enumerateY() == null)
+			return 0;
 		
 		for (int i = 0; i < lts.size(); i++) {
 			

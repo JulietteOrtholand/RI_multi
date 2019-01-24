@@ -28,7 +28,6 @@ public class MuticlassHierClassif {
 		model.setInstantiation(instance);
 		System.out.println("Instanciation terminée, chef!");
 		
-		/* *OPTION* Création d'un evaluateur */
 		Evaluator<double[],String> evaluator = new Evaluator<double[], String>();
 		evaluator.setListtrain(dataset.listtrain);
 		evaluator.setListtest(dataset.listtest);
