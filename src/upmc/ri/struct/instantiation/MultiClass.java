@@ -26,12 +26,12 @@ public class MultiClass implements IStructInstantiation<double[], String> {
 		double[] a = new double[this.dict.size() * this.dict.size()];
 		DenseMatrix64F matrice = new DenseMatrix64F(this.dict.size(), this.dict.size());
 		for(int i=0; i< predictions.size() ; i++){
-			int ŷId = this.dict.get(predictions.get(i));
+			int ychapId = this.dict.get(predictions.get(i));
 			int yId = this.dict.get(gt.get(i));
-			double old_value = matrice.get(ŷId, yId);
-			matrice.set(ŷId, yId, old_value + 1);
+			double old_value = matrice.get(ychapId, yId);
+			matrice.set(ychapId, yId, old_value + 1);
 		}
-		System.out.println(matrice.getData());
+		matrice.print();
 		MatrixVisualization.show(matrice, "Matrice de confusion de la base de test <3 <3");
 	}
 	

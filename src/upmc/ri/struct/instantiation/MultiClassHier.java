@@ -21,19 +21,19 @@ public class MultiClassHier extends MultiClass {
 		double max = - Double.MAX_VALUE;
 		
 		for(String class1: enumerateY()) {
-			int ŷ = this.dict.get(class1);
+			int ychap = this.dict.get(class1);
 			
 			for(String class2: enumerateY()) {
 				int y = this.dict.get(class2);
 				
-				if (ŷ < y) {
-					this.distances[ŷ][y] = 1 - calculator.calcRelatednessOfWords(class1, class2);
+				if (ychap < y) {
+					this.distances[ychap][y] = 1 - calculator.calcRelatednessOfWords(class1, class2);
 					
-					if (this.distances[ŷ][y] < min)
-						min = this.distances[ŷ][y];
+					if (this.distances[ychap][y] < min)
+						min = this.distances[ychap][y];
 					
-					if (this.distances[ŷ][y] > max)
-						max = this.distances[ŷ][y];
+					if (this.distances[ychap][y] > max)
+						max = this.distances[ychap][y];
 				}
 			}
 		}

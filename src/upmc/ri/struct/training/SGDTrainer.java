@@ -47,10 +47,10 @@ public class SGDTrainer<X,Y> implements ITrainer<X,Y>{
 				Y yi = ts.output;
 				
 				/* loss-augmented inference */
-				Y ŷ = model.lai(ts);
+				Y ychap = model.lai(ts);
 				
 				double[] g = VectorOperations.subtract(
-						instance.psi(xi, ŷ), 
+						instance.psi(xi, ychap), 
 						instance.psi(xi, yi)
 						);
 				/* update */
